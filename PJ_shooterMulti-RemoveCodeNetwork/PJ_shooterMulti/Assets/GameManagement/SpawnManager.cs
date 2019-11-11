@@ -11,7 +11,8 @@ public class SpawnManager : NetworkBehaviour {
     public GameObject BlueSide;
     // Use this for initialization
     void Start () {
-       
+        CmdSpawnManager();
+        CmdSpawnOscillator();
     }
 
     [Command]
@@ -19,7 +20,9 @@ public class SpawnManager : NetworkBehaviour {
     {
         GameObject scoreDisplayer = (GameObject)Instantiate(scoreDisplayerPrefab);
         NetworkServer.Spawn(scoreDisplayer);
+
         GameObject playerRespawnManager = (GameObject)Instantiate(scoreDisplayerPrefab);
+        NetworkServer.Spawn(playerRespawnManager);
     }
     
     [Command]

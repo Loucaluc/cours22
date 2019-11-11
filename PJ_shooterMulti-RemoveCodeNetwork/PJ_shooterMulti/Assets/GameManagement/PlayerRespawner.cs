@@ -10,7 +10,7 @@ public class PlayerRespawner : NetworkBehaviour {
     [Command]
     public void CmdRespawn(GameObject player)
     {
-
+        StartCoroutine(Respawn(player, respawnTime));
     }
 
     IEnumerator Respawn(GameObject player, float delayTime)
