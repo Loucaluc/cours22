@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 [RequireComponent(typeof(AimController))]
-public class FollowMouse : MonoBehaviour {
+public class FollowMouse : NetworkBehaviour {
     [SerializeField] GameObject gun;
     [SerializeField] Camera playerCamera;
     [SerializeField] GameObject player;

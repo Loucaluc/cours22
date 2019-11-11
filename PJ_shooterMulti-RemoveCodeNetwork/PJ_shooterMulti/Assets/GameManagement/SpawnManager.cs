@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-
-public class SpawnManager : MonoBehaviour {
+public class SpawnManager : NetworkBehaviour {
     public GameObject scoreDisplayerPrefab;
     public GameObject playerRespawnManagerPrefab;
     public GameObject middleOscillatorPrefab;
@@ -13,8 +13,25 @@ public class SpawnManager : MonoBehaviour {
     void Start () {
        
     }
-	
-	
+
+    [Command]
+    public void CmdSpawnManager()
+    {
+        GameObject scoreDisplayer = (GameObject)Instantiate(scoreDisplayerPrefab);
+        NetworkServer.Spawn(scoreDisplayer);
+        GameObject playerRespawnManager = (GameObject)Instantiate(scoreDisplayerPrefab);
+    }
     
+    [Command]
+    public void CmdSpawnOscillator()
+    {
+        GameObject middleOscillator = (GameObject)Instantiate(middleOscillatorPrefab, RedSide.transform);
+        middleOscillator.transform.localPosition = new Vector3(12.5f, 0, 23);
+        NetworkServer.Spawn(middleOscillator);
+
+        middleOscillator = (GameObject)Instantiate(middleOscillatorPrefab, BlueSide.transform);
+        middleOscillator.transform.localPosition = new Vector3(12.5f, 0, 23);
+        NetworkServer.Spawn(middleOscillator);
+    }
     
 }

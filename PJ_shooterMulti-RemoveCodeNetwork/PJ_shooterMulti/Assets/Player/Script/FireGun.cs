@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(PlayerController))]
-public class FireGun : MonoBehaviour {
+public class FireGun : NetworkBehaviour {
     public ParticleSystem fireGun;
     [SerializeField] GameObject Bullet;
     [SerializeField] GameObject BulletEmiter;
@@ -23,16 +23,32 @@ public class FireGun : MonoBehaviour {
 
 
     void Update() {
-        if (playerController.IsAlive()) {//AJOUT
+        if (playerController.IsAlive() && isLocalPlayer ) {//AJOUT
             timerLastShot += Time.deltaTime;
             if (timerLastShot > fireRate) {
                 var fire1 = Input.GetAxis("Fire1");
                 if (fire1 > 0) {
-
+                    CmdFire(gameObject);
                     timerLastShot = 0;
                 }
             }
         }
     }
+
+    [Command]
+
+    private void CmdFire(GameObject owner)
+    {
+        GameObject bullet = Instantiate(Bullet, BulletEmiter.transform.position, BulletEmiter.transform.rotation);
+        bullet.GetComponent<Bullet>().SetOwner(owner);
+        RpcPlayGunSound();
+        NetworkServer.Spawn(bullet);
+    }
     
+    [ClientRpc]
+
+    private void RpcPlayGunSound()
+    {
+        audioSource.PlayOneShot(gunSound);
+    }
 }
